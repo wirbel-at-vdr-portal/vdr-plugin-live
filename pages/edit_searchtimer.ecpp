@@ -92,7 +92,7 @@ if (!logged_in && LiveSetup().UseAuth()) return reply.redirect("login.html");
 }>
 <%cpp>
 
-	if (!cUser::CurrentUserHasRightTo(UR_EDITSTIMERS))
+	if (!Users.UserMayEditSearchTimers())
 		throw HtmlError( tr("Sorry, no permission. Please contact your administrator!") );
 
 #define SELECTIF(x) reply.out() << ( (x) ? "selected=\"selected\"" : "" );

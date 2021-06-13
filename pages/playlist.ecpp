@@ -25,7 +25,7 @@ using namespace vdrlive;
 #endif
 
 	if (!logged_in && LiveSetup().UseAuth()) return reply.redirect("login.html");
-	if (!cUser::CurrentUserHasRightTo(UR_STARTREPLAY))
+	if (!Users.UserMayStartReplay())
 		throw HtmlError( tr("Sorry, no permission. Please contact your administrator!") );
 
     // the availabilty of Channel signals that we will do live tv streaming.

@@ -42,7 +42,7 @@ static const size_t maximumDescriptionLength = 300;
 		if ( timer == 0 )
 			throw HtmlError( tr("Couldn't find timer. Maybe you mistyped your request?") );
 		if (action == "delete") {
-			if (!cUser::CurrentUserHasRightTo(UR_DELTIMERS))
+			if (!Users.UserMayDeleteTimers())
 				throw HtmlError( tr("Sorry, no permission. Please contact your administrator!") );
 //                        dsyslog("live: timers.ecpp timer->Id() %d", timer->Id());
 //                        dsyslog("live: timers.ecpp timer->Remote() %s", timer->Remote());

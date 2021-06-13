@@ -1,74 +1,68 @@
-#ifndef VDR_LIVE_USERS_H
-#define VDR_LIVE_USERS_H
+/*******************************************************************************
+ * users.h: User specific rights for the LIVE plugin.
+ * See the README file for copyright information and how to reach the author(s).
+ ******************************************************************************/
+#pragma once
 
-// STL headers need to be before VDR tools.h (included by <vdr/channels.h>)
+/* do not include any VDR, cxxtools or tntnet headers here. */
 #include <string>
 
-#if TNTVERSION >= 30000
-        #include <cxxtools/log.h>  // must be loaded before any vdr include because of duplicate macros (LOG_ERROR, LOG_DEBUG, LOG_INFO)
-#endif
 
-#include <vdr/tools.h>
-#include <vdr/config.h>
-
-namespace vdrlive {
-
-enum eUserRights
-{
-	UR_EDITSETUP=1,
-	UR_EDITTIMERS,
-	UR_DELTIMERS,
-	UR_DELRECS,
-	UR_USEREMOTE,
-	UR_STARTREPLAY,
-	UR_SWITCHCHNL,
-	UR_EDITSTIMERS,
-	UR_DELSTIMERS,
-	UR_EDITRECS
+enum eUserRights {
+  UR_EDITSETUP   = (1 << 0),
+  UR_EDITTIMERS  = (1 << 1),
+  UR_DELTIMERS   = (1 << 2),
+  UR_DELRECS     = (1 << 3),
+  UR_USEREMOTE   = (1 << 4),
+  UR_STARTREPLAY = (1 << 5),
+  UR_SWITCHCHNL  = (1 << 6),
+  UR_EDITSTIMERS = (1 << 7),
+  UR_DELSTIMERS  = (1 << 8),
+  UR_EDITRECS    = (1 << 9),
+  UR_ADMIN       = ~0
 };
 
-// --- cUser --------------------------------------------------------
-class cUser : public cListObject {
-	int m_ID;
-    std::string m_Name;
-    std::string m_PasswordMD5;
-	int m_Userrights;
+class iUser {
 public:
-	cUser() : m_ID(-1), m_Userrights(0) {}
-	cUser(int ID, const std::string& Name, const std::string& Password);
-	int Id() const { return m_ID; }
-	std::string Name() const { return m_Name; }
-	std::string PasswordMD5() const { return m_PasswordMD5; }
-	int Userrights() const { return m_Userrights; }
-	int GetPasswordLength() const;
-	std::string const GetMD5HashPassword() const;
-	void SetId(int Id) { m_ID = Id; }
-	void SetName(const std::string& Name) { m_Name = Name; }
-	void SetPassword(const std::string& Password);
-	void SetUserrights(int Userrights) { m_Userrights = Userrights; }
-	bool HasRightTo(eUserRights right);
-	static bool CurrentUserHasRightTo(eUserRights right);
-	void SetRight(eUserRights right);
-	bool Parse(const char *s);
-	const char *ToText(void);
-	bool Save(FILE *f);
+  virtual ~iUser();
+  int Id(void);
+  std::string Name(void);
+  std::string PasswordMD5(void);
+  int Userrights(void);
+  int GetPasswordLength(void);
+  std::string GetMD5HashPassword(void);
+  void SetId(int Id);
+  void SetName(const std::string& Name);
+  void SetPassword(const std::string& Password);
+  void SetUserrights(int Userrights);
 };
 
-// --- cUsers --------------------------------------------------------
-class cUsers : public cConfig<cUser> {
-  public:
-	bool ValidUserLogin(const std::string& login, const std::string& password);
-	bool ValidLogin(const std::string& login, const std::string& password);
-    bool Delete(const std::string& Name);
-	static cUser* GetByUserId(const std::string& Id);
-	static cUser* GetByUserName(const std::string& Name);
-	int GetNewId();
+class iUsers {
+public:
+  virtual ~iUsers();
+  bool ValidLogin(const std::string& login, const std::string& password);
+  void SetCurrentUser(std::string Name);
+  std::string CurrentUser(void);
 
-	static std::string logged_in_user;
+  bool UserMayEditSetup(void);
+  bool UserMayEditTimers(void);
+  bool UserMayDeleteTimers(void);
+  bool UserMayDeleteRecs(void);
+  bool UserMayUseRemote(void);
+  bool UserMayStartReplay(void);
+  bool UserMaySwitchChannel(void);
+  bool UserMayEditSearchTimers(void);
+  bool UserMayDeleteSearchTimers(void);
+  bool UserMayEditRecs(void);
+
+  iUser* First(void);
+  iUser* Next(iUser* user);
+  iUser* GetById(const std::string& Id);
+  iUser* GetByName(const std::string& Name);
+  iUser* Add(std::string Name, std::string Password);
+  void Del(std::string Id);
+  bool Load(const char* FileName);
+  bool Save(void);
 };
 
-extern cUsers Users;
-
-}
-
-#endif
+extern iUsers& Users;

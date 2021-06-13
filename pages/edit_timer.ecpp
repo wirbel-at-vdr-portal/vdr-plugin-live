@@ -59,7 +59,7 @@ const cTimer* timer;
 #endif
 	if (!logged_in && LiveSetup().UseAuth()) return reply.redirect("login.html");
 
-	if (!cUser::CurrentUserHasRightTo(UR_EDITTIMERS))
+	if (!Users.UserMayEditTimers())
 		throw HtmlError( tr("Sorry, no permission. Please contact your administrator!") );
 
 	bool ajaxReq = !async.empty() && (lexical_cast<int>(async) != 0);

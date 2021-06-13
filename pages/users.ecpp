@@ -23,7 +23,7 @@ if (!logged_in && LiveSetup().UseAuth()) return reply.redirect("login.html");
 	if ( !userid.empty() ) {
 		if (action == "delete")
 		{
-			Users.Del(Users.GetByUserId( userid ));
+			Users.Del(userid);
 			Users.Save();
 		}
 	}
@@ -50,7 +50,7 @@ if (!logged_in && LiveSetup().UseAuth()) return reply.redirect("login.html");
 					<td class="rightcol" colspan="8"/>
 				</tr>
 <%cpp>
-				cUser* user = Users.First();
+				iUser* user = Users.First();
 				while (user) 
 				{
 					bool bottom = (Users.Next(user) == NULL);

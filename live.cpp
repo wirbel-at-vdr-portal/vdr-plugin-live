@@ -21,7 +21,6 @@ const char *Plugin::DESCRIPTION    = LIVESUMMARY;
 std::string Plugin::m_configDirectory;
 std::string Plugin::m_resourceDirectory;
 
-cUsers Users;
 
 Plugin::Plugin(void)
 {
@@ -49,7 +48,7 @@ bool Plugin::Start(void)
 	PreLoadFileCache(m_resourceDirectory);
 
 	// load users
-	Users.Load(AddDirectory(m_configDirectory.c_str(), "users.conf"), true);
+	Users.Load(AddDirectory(m_configDirectory.c_str(), "users.conf"));
 
 	// XXX error handling
 	m_thread.reset( new ServerThread );

@@ -30,7 +30,7 @@ const cRecording* recording;
 <%cpp>
 	if (!logged_in && LiveSetup().UseAuth()) return reply.redirect("login.html");
 
-	if (!cUser::CurrentUserHasRightTo(UR_EDITRECS))
+	if (!Users.UserMayEditRecs())
 		throw HtmlError( tr("Sorry, no permission. Please contact your administrator!") );
 
 	bool ajaxReq = !async.empty() && (lexical_cast<int>(async) != 0);

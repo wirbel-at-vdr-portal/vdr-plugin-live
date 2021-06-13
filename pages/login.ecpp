@@ -21,13 +21,13 @@ std::string message;
 if (action == "login") {
 	if (Users.ValidLogin(login, password)) {
 		logged_in = true;
-		cUsers::logged_in_user = login;
+		Users.SetCurrentUser(login);
 	} else {
 		message = tr("Wrong username or password");
 	}
 } else if (action == "logout") {
 	logged_in = false;
-	cUsers::logged_in_user = "";
+	Users.SetCurrentUser("");
 }
 
 LiveSetup().CheckLocalNet(request.getPeerIp());

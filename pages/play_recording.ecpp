@@ -16,7 +16,7 @@ using namespace vdrlive;
 </%session>
 <%cpp>
 	if (!logged_in && LiveSetup().UseAuth()) return reply.redirect("login.html");
-	if (!cUser::CurrentUserHasRightTo(UR_STARTREPLAY))
+	if (!Users.UserMayStartReplay())
 		throw HtmlError( tr("Sorry, no permission. Please contact your administrator!") );
 	reply.setContentType( "application/xml" );
 

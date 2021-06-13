@@ -40,7 +40,7 @@ using namespace vdrlive;
 <%include>page_init.eh</%include>
 <%cpp>
 if (!logged_in && LiveSetup().UseAuth() ) return reply.redirect("login.html");
-if (!cUser::CurrentUserHasRightTo(UR_EDITSETUP))
+if (!Users.UserMayEditSetup())
 		throw HtmlError( tr("Sorry, no permission. Please contact your administrator!") );
 
 #define SELECTIF(x) reply.out() << ( (x) ? "selected=\"selected\"" : "" );
